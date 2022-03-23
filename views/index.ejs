@@ -1,0 +1,130 @@
+<!doctype HTML>
+
+<head>
+    <title>URL Shortener</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    body {
+        background: linear-gradient(to left, #00ffbb, #00ff80);
+    }
+
+    .title {
+        color: black;
+        font-size: 1.6rem;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .made-by {
+        color: #525252;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    .main-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 100px;
+    }
+
+    .link-form {
+        max-width: 900px;
+        background-color: rgba(0, 0, 0, 0.32);
+        padding: 10px;
+        border-radius: 15px;
+        width: 90vw;
+        height: 100px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .form-title {
+        color: white;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+    }
+
+    input {
+        width: 100%;
+        border-color: transparent;
+        border-radius: 10px;
+        height: 30px;
+        margin-top: 5px;
+    }
+
+    button {
+        background-color: white;
+        height: 80px;
+        border-radius: 10px;
+        border-color: transparent;
+        transition: .1s all ease-in-out;
+    }
+
+    button:hover {
+        background-color: #e1e1e1;
+    }
+
+    button:active {
+        background-color: #bdbdbd;
+    }
+
+    #short_url {
+        font-family: Arial, sans-serif;
+    }
+</style>
+
+<body>
+<p class="title">URL Shortener Microservice</p>
+<p class="made-by">Made by Arya</p>
+<div class="main-form">
+    <form class="link-form" onsubmit="handleSubmit(event)">
+        <div class="input">
+            <label class="form-title">Your long URL:</label>
+            <label>
+                <input id="input" placeholder="https://www.google.com" required/>
+            </label>
+        </div>
+        <button type="submit" class="submit-button">Shorten!</button>
+    </form>
+    <p id="short_url"></p>
+</div>
+
+<script>
+    function handleSubmit(form) {
+        form.preventDefault();
+        let value = document.getElementById("input"),
+            result = document.getElementById("short_url");
+        if (!value || typeof value.value !== "string" || !value.value.trim() || !checkValidUrl(value.value)) return result.innerText = "Invalid URL was given.";
+        fetch(`/api/shorturl?url=${encodeURIComponent(value.value)}`, {
+            method: "POST"
+        }).then(x => x.json()).then(x => {
+            if (x.error || !x.short_url) return result.innerText = typeof x.error === "string" ? x.error : "Unknown error occured.";
+            const shortUrl = `${window.location.protocol}//${window.location.host}/api/shorturl/${x.short_url}`;
+            return result.innerHTML = `<a href="${shortUrl}">${shortUrl}</a>`
+        });
+    }
+
+    function checkValidUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+</body>
