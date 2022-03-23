@@ -102,3 +102,12 @@ dist
 
 # TernJS port file
 .tern-port
+
+json.sqlite
+package-lock.json
+
+./json.sqlite
+./package-lock.json
+
+/package-lock.json
+/json.sqlite

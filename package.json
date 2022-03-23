@@ -1,0 +1,29 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "description": "a simple url shortener",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Takiyo0/url-shortener.git"
+  },
+  "keywords": [
+    "url",
+    "shortener"
+  ],
+  "author": "Takiyo, Takiyo0",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Takiyo0/url-shortener/issues"
+  },
+  "homepage": "https://github.com/Takiyo0/url-shortener#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "quick.db": "^7.1.3"
+  }
+}
