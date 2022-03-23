@@ -16,14 +16,16 @@ module.exports = () => {
     });
 
     route.post("/shorturl", (req, res) => {
-        let query = req.query;
-        if (!checkValidUrl(query.url)) return res.status(400).json({error: "invalid url"});
+        let query = req.query, 
+          body = req.body;
+      let url = query.url ? query.url : body.url;
+        if (!url || !checkValidUrl(url)) return res.status(200).json({error: "invalid url"});
         let shortUrl = randomString(5);
         quickDb.push("links", {
             short: shortUrl,
-            url: query.url
+            url: url
         })
-        return res.status(200).json({short_url: shortUrl, original_url: query.url});
+        return res.status(200).json({short_url: shortUrl, original_url: url});
     });
 
     return route;
@@ -31,7 +33,8 @@ module.exports = () => {
 
 function checkValidUrl(url) {
     try {
-        new URL(url);
+        const parsed = new URL(url);
+      if(!["https:", "http:"].includes(parsed.protocol)) return false;
         return true;
     } catch (e) {
         return false;
